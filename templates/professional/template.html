@@ -42,7 +42,7 @@
         <h2><span class="section-icon">●</span> {{ section_name }}</h2>
         <div class="section-content">
         {% for entry in entries %}
-            <div class="entry">
+            <div class="entry {% if not entry.subtitle and not entry.date and not entry.details %}entry-skill{% endif %}">
                 <div class="entry-header">
                     <span class="entry-title">{{ entry.title|md }}</span>
                     {% if entry.subtitle %}

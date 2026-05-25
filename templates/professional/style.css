@@ -1,6 +1,6 @@
 @page {
     size: A4;
-    margin: 12mm 14mm;
+    margin: 10mm 12mm;
 }
 
 * {
@@ -11,8 +11,8 @@
 
 body {
     font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
-    font-size: 9pt;
-    line-height: 1.35;
+    font-size: 8.5pt;
+    line-height: 1.3;
     color: #1a1a1a;
     orphans: 3;
     widows: 3;
@@ -26,8 +26,8 @@ body {
 
 .resume-header {
     position: relative;
-    margin-bottom: 8pt;
-    padding-bottom: 6pt;
+    margin-bottom: 6pt;
+    padding-bottom: 4pt;
     border-bottom: 1.5pt solid var(--accent-color);
 }
 
@@ -72,7 +72,7 @@ h1 {
 }
 
 .section {
-    margin-bottom: 6pt;
+    margin-bottom: 4pt;
     page-break-inside: avoid;
 }
 
@@ -94,7 +94,7 @@ h2 {
 }
 
 .entry {
-    margin-bottom: 4pt;
+    margin-bottom: 3pt;
     page-break-inside: avoid;
 }
 
@@ -107,7 +107,7 @@ h2 {
 }
 
 .entry-title {
-    font-size: 9.5pt;
+    font-size: 9pt;
     font-weight: 700;
     color: #222;
 }
@@ -143,4 +143,19 @@ h2 {
     position: absolute;
     left: 2pt;
     color: #555;
+}
+
+.entry-skill .entry-header {
+    margin-bottom: 0;
+}
+
+.entry-skill .entry-title {
+    font-size: 9pt;
+    font-weight: 400;
+    color: #333;
+}
+
+.entry-skill .entry-title strong {
+    font-weight: 600;
+    color: #222;
 }
