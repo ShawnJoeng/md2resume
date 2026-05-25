@@ -74,8 +74,18 @@ def _parse_entry_header(header: str) -> ResumeEntry:
     parts = [p.strip() for p in header.split('|')]
     entry = ResumeEntry(title=parts[0])
     if len(parts) >= 3:
-        entry.subtitle = parts[1]
-        entry.date = parts[-1]
+        date_idx = -1
+        for i in range(len(parts) - 1, 0, -1):
+            if re.search(r'\d{4}', parts[i]):
+                date_idx = i
+                break
+        if date_idx > 0:
+            entry.date = parts[date_idx]
+            remaining = parts[1:date_idx] + parts[date_idx+1:]
+            entry.subtitle = ' | '.join(remaining) if remaining else ''
+        else:
+            entry.subtitle = ' | '.join(parts[1:-1])
+            entry.date = parts[-1]
     elif len(parts) == 2:
         if re.search(r'\d{4}', parts[1]):
             entry.date = parts[1]
