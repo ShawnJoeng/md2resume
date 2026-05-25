@@ -3,7 +3,7 @@ from pathlib import Path
 
 from core.parser import parse_markdown
 from core.renderer import generate_all
-from core.llm import refine_resume
+from core.llm import refine_resume, convert_to_resume
 
 EXAMPLES_DIR = Path(__file__).parent / "examples"
 
@@ -75,6 +75,28 @@ def load_example(lang):
     return ""
 
 
+def convert_raw_content(raw_text, raw_file, api_key, base_url, model):
+    content = raw_text.strip() if raw_text and raw_text.strip() else ""
+    if not content and raw_file is not None:
+        content = _read_md_file(raw_file)
+
+    if not content:
+        raise gr.Error("请粘贴或上传你的原始内容")
+    if not api_key:
+        raise gr.Error("请输入 API Key")
+
+    try:
+        result = convert_to_resume(
+            raw_content=content,
+            api_key=api_key,
+            base_url=base_url or "https://api.openai.com/v1",
+            model=model or "gpt-4o-mini",
+        )
+        return result
+    except Exception as e:
+        raise gr.Error(f"智能转换失败: {str(e)}")
+
+
 with gr.Blocks(
     title="md2resume - Markdown 转精美简历",
     theme=gr.themes.Soft(),
@@ -86,7 +108,7 @@ with gr.Blocks(
 
 **Markdown + 证件照 → 精美简历**（PDF / HTML / PNG）
 
-支持多套模板、一页自适应、AI 智能润色
+支持多套模板、一页自适应、AI 智能润色、智能转换
 """
     )
 
@@ -129,6 +151,55 @@ with gr.Blocks(
                 fn=generate_resume,
                 inputs=[md_file, md_text, photo, template_name, fit_one_page],
                 outputs=[pdf_output, html_output, png_output, preview_img],
+            )
+
+        with gr.Tab("智能转换"):
+            gr.Markdown(
+                """
+### 随便粘贴，AI 帮你整理成标准简历
+
+不需要记格式！把你的经历、旧简历、笔记等任意内容粘贴进来，AI 会自动提取信息并生成标准 Markdown 简历格式。
+"""
+            )
+            with gr.Row():
+                with gr.Column():
+                    convert_api_key = gr.Textbox(
+                        label="API Key",
+                        type="password",
+                        placeholder="sk-...",
+                    )
+                    convert_base_url = gr.Textbox(
+                        label="API Base URL",
+                        value="https://api.openai.com/v1",
+                        placeholder="https://api.openai.com/v1",
+                    )
+                    convert_model = gr.Textbox(
+                        label="模型名称",
+                        value="gpt-4o-mini",
+                        placeholder="gpt-4o-mini",
+                    )
+                with gr.Column():
+                    convert_file = gr.File(
+                        label="或上传文件",
+                        file_types=[".md", ".txt", ".doc"],
+                    )
+
+            convert_input = gr.Textbox(
+                label="粘贴你的原始内容（随意格式均可）",
+                lines=12,
+                placeholder="例如：\n我叫张三，2020年从北大计算机硕士毕业，现在在字节跳动做后端开发...\n或者直接粘贴旧简历的文本内容...",
+            )
+            convert_btn = gr.Button("智能转换", variant="primary", size="lg")
+            convert_output = gr.Textbox(
+                label="生成的标准 Markdown（可编辑后复制到「生成简历」使用）",
+                lines=15,
+                interactive=True,
+            )
+
+            convert_btn.click(
+                fn=convert_raw_content,
+                inputs=[convert_input, convert_file, convert_api_key, convert_base_url, convert_model],
+                outputs=[convert_output],
             )
 
         with gr.Tab("AI 润色"):
