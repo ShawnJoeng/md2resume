@@ -145,6 +145,16 @@ h2 {
     color: #555;
 }
 
+.entry-details li.entry-summary {
+    padding-left: 0;
+    color: #444;
+    font-style: italic;
+}
+
+.entry-details li.entry-summary::before {
+    content: none;
+}
+
 .entry-skill .entry-header {
     margin-bottom: 0;
 }
