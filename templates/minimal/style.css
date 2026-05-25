@@ -1,0 +1,113 @@
+@page {
+    size: A4;
+    margin: var(--page-margin);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Georgia", "PingFang SC", "Noto Serif CJK SC", "STSong", "SimSun", serif;
+    font-size: var(--body-font-size);
+    line-height: var(--line-height);
+    color: var(--primary-color);
+}
+
+.resume {
+    max-width: 210mm;
+    margin: 0 auto;
+}
+
+.resume-header {
+    text-align: center;
+    margin-bottom: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+    border-bottom: 1px solid #ccc;
+}
+
+h1 {
+    font-size: var(--h1-font-size);
+    font-weight: 400;
+    letter-spacing: 2pt;
+    margin-bottom: 8pt;
+    color: var(--primary-color);
+}
+
+.contact {
+    font-size: 9pt;
+    color: var(--accent-color);
+}
+
+.contact-item {
+    white-space: nowrap;
+}
+
+.separator {
+    margin: 0 4pt;
+}
+
+.section {
+    margin-bottom: var(--section-spacing);
+}
+
+h2 {
+    font-size: var(--h2-font-size);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2pt;
+    color: var(--accent-color);
+    margin-bottom: var(--entry-spacing);
+    padding-bottom: 3pt;
+    border-bottom: 0.5pt solid #ddd;
+}
+
+.entry {
+    margin-bottom: var(--entry-spacing);
+}
+
+.entry-header {
+    display: flex;
+    align-items: baseline;
+    gap: 6pt;
+}
+
+.entry-title {
+    font-size: var(--h3-font-size);
+    font-weight: 700;
+}
+
+.entry-subtitle {
+    font-size: var(--body-font-size);
+    color: var(--accent-color);
+    font-style: italic;
+}
+
+.entry-date {
+    margin-left: auto;
+    font-size: 9pt;
+    color: #999;
+    white-space: nowrap;
+}
+
+.entry-details {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 3pt;
+}
+
+.entry-details li {
+    padding-left: 12pt;
+    position: relative;
+    margin-bottom: 2pt;
+    color: #444;
+}
+
+.entry-details li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: #999;
+}
