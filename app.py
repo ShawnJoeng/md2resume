@@ -26,7 +26,7 @@ def generate_resume(md_file, md_text, photo, template_name, fit_one_page):
 
     resume_data = parse_markdown(md_content)
 
-    template_map = {"经典单栏": "classic", "现代双栏": "modern", "极简风格": "minimal"}
+    template_map = {"经典单栏": "classic", "现代双栏": "modern", "极简风格": "minimal", "专业风格": "professional"}
     tpl = template_map.get(template_name, "classic")
 
     photo_path = None
@@ -131,7 +131,7 @@ with gr.Blocks(
                     )
                     template_name = gr.Dropdown(
                         label="选择模板",
-                        choices=["经典单栏", "现代双栏", "极简风格"],
+                        choices=["经典单栏", "现代双栏", "极简风格", "专业风格"],
                         value="经典单栏",
                     )
                     fit_one_page = gr.Checkbox(

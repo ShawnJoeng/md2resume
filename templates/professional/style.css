@@ -1,0 +1,146 @@
+@page {
+    size: A4;
+    margin: 12mm 14mm;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    font-size: 9pt;
+    line-height: 1.35;
+    color: #1a1a1a;
+    orphans: 3;
+    widows: 3;
+}
+
+.resume {
+    max-width: 210mm;
+    margin: 0 auto;
+    position: relative;
+}
+
+.resume-header {
+    position: relative;
+    margin-bottom: 8pt;
+    padding-bottom: 6pt;
+    border-bottom: 1.5pt solid var(--accent-color);
+}
+
+.photo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 72pt;
+    height: 96pt;
+    object-fit: cover;
+    border-radius: 2pt;
+}
+
+.header-info {
+    padding-right: 80pt;
+}
+
+h1 {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4pt;
+    letter-spacing: 1pt;
+}
+
+.contact {
+    font-size: 8.5pt;
+    color: #444;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2pt;
+}
+
+.contact-item {
+    white-space: nowrap;
+}
+
+.sep {
+    color: #bbb;
+    margin: 0 3pt;
+}
+
+.section {
+    margin-bottom: 6pt;
+    page-break-inside: avoid;
+}
+
+h2 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 3pt;
+    padding-bottom: 2pt;
+    border-bottom: 0.5pt solid #ddd;
+    display: flex;
+    align-items: center;
+    gap: 4pt;
+}
+
+.section-icon {
+    color: var(--accent-color);
+    font-size: 8pt;
+}
+
+.entry {
+    margin-bottom: 4pt;
+    page-break-inside: avoid;
+}
+
+.entry-header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4pt;
+    margin-bottom: 1pt;
+}
+
+.entry-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #222;
+}
+
+.entry-subtitle {
+    font-size: 8.5pt;
+    color: #666;
+}
+
+.entry-date {
+    margin-left: auto;
+    font-size: 8pt;
+    color: #888;
+    white-space: nowrap;
+}
+
+.entry-details {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1pt;
+}
+
+.entry-details li {
+    padding-left: 10pt;
+    position: relative;
+    margin-bottom: 0.5pt;
+    color: #333;
+    line-height: 1.4;
+}
+
+.entry-details li::before {
+    content: "•";
+    position: absolute;
+    left: 2pt;
+    color: #555;
+}
