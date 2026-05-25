@@ -101,6 +101,7 @@ def parse_markdown(md_content: str) -> ResumeData:
     current_section = None
     current_entry = None
     in_header = True
+    section_display_names = {}
 
     for line in lines:
         stripped = line.strip()
@@ -117,8 +118,10 @@ def parse_markdown(md_content: str) -> ResumeData:
 
             section_name = stripped[3:].strip()
             normalized = SECTION_ALIASES.get(section_name.lower(), section_name)
-            current_section = section_name
-            resume.sections[current_section] = []
+            current_section = normalized
+            if current_section not in resume.sections:
+                resume.sections[current_section] = []
+                section_display_names[current_section] = section_name
             continue
 
         if stripped.startswith('### '):
@@ -148,5 +151,11 @@ def parse_markdown(md_content: str) -> ResumeData:
 
     if current_entry and current_section is not None:
         resume.sections[current_section].append(current_entry)
+
+    display_sections = {}
+    for key, entries in resume.sections.items():
+        display_name = section_display_names.get(key, key)
+        display_sections[display_name] = entries
+    resume.sections = display_sections
 
     return resume
