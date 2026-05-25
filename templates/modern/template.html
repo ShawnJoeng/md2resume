@@ -51,10 +51,10 @@
             {% for entry in resume.sections[skills_key.val] %}
             <div class="skill-item">
                 {% if entry.title %}
-                <span>{{ entry.title }}</span>
+                <span>{{ entry.title|md }}</span>
                 {% endif %}
                 {% for detail in entry.details %}
-                <span>{{ detail }}</span>
+                <span>{{ detail|md }}</span>
                 {% endfor %}
             </div>
             {% endfor %}
@@ -71,7 +71,7 @@
             {% for entry in entries %}
             <div class="entry">
                 <div class="entry-header">
-                    <span class="entry-title">{{ entry.title }}</span>
+                    <span class="entry-title">{{ entry.title|md }}</span>
                     {% if entry.date %}
                     <span class="entry-date">{{ entry.date }}</span>
                     {% endif %}
@@ -82,7 +82,7 @@
                 {% if entry.details %}
                 <ul class="entry-details">
                     {% for detail in entry.details %}
-                    <li>{{ detail }}</li>
+                    <li>{{ detail|md }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}

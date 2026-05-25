@@ -1,17 +1,27 @@
 from __future__ import annotations
 
 import base64
+import re
 import tempfile
 from io import BytesIO
 from pathlib import Path
 from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader
+from markupsafe import Markup
 from PIL import Image
 
 from .parser import ResumeData
 
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+
+
+def _md_inline(text: str) -> Markup:
+    """Convert Markdown inline formatting to HTML."""
+    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+    text = re.sub(r'`(.+?)`', r'<code>\1</code>', text)
+    return Markup(text)
 
 
 def _encode_photo(photo_path: str, max_size: tuple[int, int] = (300, 400)) -> str:
@@ -25,6 +35,7 @@ def _encode_photo(photo_path: str, max_size: tuple[int, int] = (300, 400)) -> st
 def render_html(resume_data: ResumeData, template_name: str = "classic") -> str:
     template_dir = TEMPLATES_DIR / template_name
     env = Environment(loader=FileSystemLoader(str(template_dir)))
+    env.filters['md'] = _md_inline
     template = env.get_template("template.html")
     css_path = template_dir / "style.css"
     css_content = css_path.read_text(encoding="utf-8")

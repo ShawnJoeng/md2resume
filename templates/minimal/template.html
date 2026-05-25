@@ -39,7 +39,7 @@
         {% for entry in entries %}
             <div class="entry">
                 <div class="entry-header">
-                    <span class="entry-title">{{ entry.title }}</span>
+                    <span class="entry-title">{{ entry.title|md }}</span>
                     {% if entry.subtitle %}
                     <span class="entry-subtitle">| {{ entry.subtitle }}</span>
                     {% endif %}
@@ -50,7 +50,7 @@
                 {% if entry.details %}
                 <ul class="entry-details">
                     {% for detail in entry.details %}
-                    <li>{{ detail }}</li>
+                    <li>{{ detail|md }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
