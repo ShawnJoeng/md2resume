@@ -82,32 +82,28 @@ with gr.Blocks(
     )
 
     gr.Markdown("### AI 配置")
-    with gr.Row(equal_height=True):
-        api_key = gr.Textbox(
-            label="API Key",
-            type="password",
-            value=DEFAULT_API_KEY,
-            placeholder="sk-...",
-            lines=1,
-            max_lines=1,
-            scale=2,
-        )
-        base_url = gr.Textbox(
-            label="Base URL",
-            value=DEFAULT_BASE_URL,
-            placeholder="https://api.openai.com/v1",
-            lines=1,
-            max_lines=1,
-            scale=2,
-        )
-        model = gr.Textbox(
-            label="模型",
-            value=DEFAULT_MODEL,
-            placeholder="claude-sonnet-4-6",
-            lines=1,
-            max_lines=1,
-            scale=1,
-        )
+    api_key = gr.Textbox(
+        label="API Key",
+        type="password",
+        value=DEFAULT_API_KEY,
+        placeholder="sk-...",
+        lines=1,
+        max_lines=1,
+    )
+    base_url = gr.Textbox(
+        label="Base URL",
+        value=DEFAULT_BASE_URL,
+        placeholder="https://api.openai.com/v1",
+        lines=1,
+        max_lines=1,
+    )
+    model = gr.Textbox(
+        label="模型",
+        value=DEFAULT_MODEL,
+        placeholder="claude-sonnet-4-6",
+        lines=1,
+        max_lines=1,
+    )
 
     gr.Markdown("### 输入内容")
     raw_file = gr.File(
@@ -133,10 +129,11 @@ with gr.Blocks(
         photo = gr.Image(
             label="证件照（可选）",
             type="filepath",
+            sources=["upload"],
         )
         fit_one_page = gr.Checkbox(
             label="自动适配一页",
-            value=False,
+            value=True,
         )
 
     generate_btn = gr.Button("生成简历", variant="primary", size="lg")

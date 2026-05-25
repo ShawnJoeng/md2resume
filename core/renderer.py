@@ -60,10 +60,24 @@ def render_png_from_pdf(pdf_bytes: bytes) -> bytes:
     try:
         import fitz
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        page = doc[0]
         mat = fitz.Matrix(2.0, 2.0)
-        pix = page.get_pixmap(matrix=mat)
-        return pix.tobytes("png")
+        pages = []
+        total_height = 0
+        width = 0
+        for page in doc:
+            pix = page.get_pixmap(matrix=mat)
+            pages.append(pix)
+            total_height += pix.height
+            width = max(width, pix.width)
+        combined = Image.new("RGB", (width, total_height), "white")
+        y_offset = 0
+        for pix in pages:
+            img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+            combined.paste(img, (0, y_offset))
+            y_offset += pix.height
+        buf = BytesIO()
+        combined.save(buf, format="PNG")
+        return buf.getvalue()
     except ImportError:
         img = Image.new("RGB", (1654, 2339), "white")
         buf = BytesIO()
