@@ -128,7 +128,7 @@ def refine_resume(
     md_content: str,
     api_key: str,
     base_url: str = "https://api.openai.com/v1",
-    model: str = "gpt-4o-mini",
+    model: str = "claude-sonnet-4-6",
 ) -> str:
     client = OpenAI(api_key=api_key, base_url=base_url)
     response = client.chat.completions.create(
@@ -146,7 +146,7 @@ def convert_to_resume(
     raw_content: str,
     api_key: str,
     base_url: str = "https://api.openai.com/v1",
-    model: str = "gpt-4o-mini",
+    model: str = "claude-sonnet-4-6",
 ) -> str:
     client = OpenAI(api_key=api_key, base_url=base_url)
     response = client.chat.completions.create(

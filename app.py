@@ -159,6 +159,8 @@ with gr.Blocks(
 ### 随便粘贴，AI 帮你整理成标准简历
 
 不需要记格式！把你的经历、旧简历、笔记等任意内容粘贴进来，AI 会自动提取信息并生成标准 Markdown 简历格式。
+
+推荐使用 Claude Sonnet 4 或同级别模型以获得最佳效果。
 """
             )
             with gr.Row():
@@ -169,14 +171,14 @@ with gr.Blocks(
                         placeholder="sk-...",
                     )
                     convert_base_url = gr.Textbox(
-                        label="API Base URL",
+                        label="API Base URL（兼容 OpenAI 格式）",
                         value="https://api.openai.com/v1",
                         placeholder="https://api.openai.com/v1",
                     )
                     convert_model = gr.Textbox(
-                        label="模型名称",
-                        value="gpt-4o-mini",
-                        placeholder="gpt-4o-mini",
+                        label="模型名称（推荐 claude-sonnet-4-6）",
+                        value="claude-sonnet-4-6",
+                        placeholder="claude-sonnet-4-6",
                     )
                 with gr.Column():
                     convert_file = gr.File(
@@ -207,7 +209,7 @@ with gr.Blocks(
                 """
 ### 使用大模型智能优化简历内容
 
-支持任何兼容 OpenAI 格式的 API（如 OpenAI、DeepSeek、智谱、月之暗面等）
+支持任何兼容 OpenAI 格式的 API（如 Anthropic、OpenAI、DeepSeek、智谱、月之暗面等）
 """
             )
             with gr.Row():
@@ -218,14 +220,14 @@ with gr.Blocks(
                         placeholder="sk-...",
                     )
                     llm_base_url = gr.Textbox(
-                        label="API Base URL",
+                        label="API Base URL（兼容 OpenAI 格式）",
                         value="https://api.openai.com/v1",
                         placeholder="https://api.openai.com/v1",
                     )
                     llm_model = gr.Textbox(
-                        label="模型名称",
-                        value="gpt-4o-mini",
-                        placeholder="gpt-4o-mini",
+                        label="模型名称（推荐 claude-sonnet-4-6）",
+                        value="claude-sonnet-4-6",
+                        placeholder="claude-sonnet-4-6",
                     )
                 with gr.Column():
                     llm_md_file = gr.File(
