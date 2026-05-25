@@ -1,6 +1,6 @@
 @page {
     size: A4;
-    margin: var(--page-margin);
+    margin: 18mm;
 }
 
 * {
@@ -14,6 +14,8 @@ body {
     font-size: var(--body-font-size);
     line-height: var(--line-height);
     color: var(--primary-color);
+    orphans: 2;
+    widows: 2;
 }
 
 .resume {
@@ -23,16 +25,16 @@ body {
 
 .resume-header {
     text-align: center;
-    margin-bottom: var(--section-spacing);
-    padding-bottom: var(--section-spacing);
+    margin-bottom: 10pt;
+    padding-bottom: 8pt;
     border-bottom: 1px solid #ccc;
 }
 
 h1 {
-    font-size: var(--h1-font-size);
+    font-size: 20pt;
     font-weight: 400;
     letter-spacing: 2pt;
-    margin-bottom: 8pt;
+    margin-bottom: 6pt;
     color: var(--primary-color);
 }
 
@@ -50,27 +52,30 @@ h1 {
 }
 
 .section {
-    margin-bottom: var(--section-spacing);
+    margin-bottom: 8pt;
+    page-break-inside: avoid;
 }
 
 h2 {
-    font-size: var(--h2-font-size);
+    font-size: 10.5pt;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 2pt;
     color: var(--accent-color);
-    margin-bottom: var(--entry-spacing);
-    padding-bottom: 3pt;
+    margin-bottom: 4pt;
+    padding-bottom: 2pt;
     border-bottom: 0.5pt solid #ddd;
 }
 
 .entry {
-    margin-bottom: var(--entry-spacing);
+    margin-bottom: 4pt;
+    page-break-inside: avoid;
 }
 
 .entry-header {
     display: flex;
     align-items: baseline;
+    flex-wrap: wrap;
     gap: 6pt;
 }
 
@@ -87,7 +92,7 @@ h2 {
 
 .entry-date {
     margin-left: auto;
-    font-size: 9pt;
+    font-size: 8.5pt;
     color: #999;
     white-space: nowrap;
 }
@@ -95,13 +100,13 @@ h2 {
 .entry-details {
     list-style: none;
     padding-left: 0;
-    margin-top: 3pt;
+    margin-top: 2pt;
 }
 
 .entry-details li {
     padding-left: 12pt;
     position: relative;
-    margin-bottom: 2pt;
+    margin-bottom: 1pt;
     color: #444;
 }
 
