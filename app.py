@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 from pathlib import Path
 
@@ -6,6 +7,11 @@ from core.renderer import generate_all
 from core.llm import convert_to_resume
 
 EXAMPLES_DIR = Path(__file__).parent / "examples"
+
+DEFAULT_API_KEY = os.environ.get("LIBINFER_SK", "")
+_raw_url = os.environ.get("LIBINFER_URL", "https://api.openai.com")
+DEFAULT_BASE_URL = _raw_url.rstrip("/") + "/v1" if not _raw_url.rstrip("/").endswith("/v1") else _raw_url
+DEFAULT_MODEL = os.environ.get("LIBINFER_MODEL", "claude-sonnet-4-6")
 
 
 def _read_md_file(file) -> str:
@@ -63,7 +69,7 @@ def generate_resume(md_text, photo, fit_one_page):
 with gr.Blocks(
     title="md2resume - Markdown 转精美简历",
     theme=gr.themes.Soft(),
-    css=".gradio-container { max-width: 1200px !important; }",
+    css=".gradio-container { max-width: 800px !important; }",
 ) as app:
     gr.Markdown(
         """
@@ -75,67 +81,72 @@ with gr.Blocks(
 """
     )
 
+    gr.Markdown("### AI 配置")
+    with gr.Row(equal_height=True):
+        api_key = gr.Textbox(
+            label="API Key",
+            type="password",
+            value=DEFAULT_API_KEY,
+            placeholder="sk-...",
+            lines=1,
+            max_lines=1,
+            scale=2,
+        )
+        base_url = gr.Textbox(
+            label="Base URL",
+            value=DEFAULT_BASE_URL,
+            placeholder="https://api.openai.com/v1",
+            lines=1,
+            max_lines=1,
+            scale=2,
+        )
+        model = gr.Textbox(
+            label="模型",
+            value=DEFAULT_MODEL,
+            placeholder="claude-sonnet-4-6",
+            lines=1,
+            max_lines=1,
+            scale=1,
+        )
+
+    gr.Markdown("### 输入内容")
+    raw_file = gr.File(
+        label="上传文件（可选）",
+        file_types=[".md", ".markdown", ".txt"],
+    )
+    raw_text = gr.Textbox(
+        label="粘贴原始内容（任意格式：旧简历、笔记、工作总结等）",
+        lines=10,
+        placeholder="例如：\n我叫张三，2020年从北大计算机硕士毕业，现在在字节跳动做后端开发...\n\n或者直接粘贴已格式化的 Markdown 简历内容",
+    )
+    convert_btn = gr.Button("智能转换（AI 整理为标准格式）", variant="secondary")
+
+    gr.Markdown("### 简历 Markdown（可编辑）")
+    md_text = gr.Textbox(
+        label="标准 Markdown 内容",
+        lines=12,
+        placeholder="# 姓名\n\n- 手机: 138-0000-0000\n- 邮箱: example@email.com\n\n## 教育经历\n...",
+        interactive=True,
+    )
+
     with gr.Row():
-        with gr.Column(scale=1):
-            gr.Markdown("### AI 配置")
-            with gr.Row():
-                api_key = gr.Textbox(
-                    label="API Key",
-                    type="password",
-                    placeholder="sk-...",
-                    scale=2,
-                )
-                base_url = gr.Textbox(
-                    label="Base URL",
-                    value="https://api.openai.com/v1",
-                    placeholder="https://api.openai.com/v1",
-                    scale=2,
-                )
-                model = gr.Textbox(
-                    label="模型",
-                    value="claude-sonnet-4-6",
-                    placeholder="claude-sonnet-4-6",
-                    scale=1,
-                )
+        photo = gr.Image(
+            label="证件照（可选）",
+            type="filepath",
+        )
+        fit_one_page = gr.Checkbox(
+            label="自动适配一页",
+            value=False,
+        )
 
-            gr.Markdown("### 输入内容")
-            raw_file = gr.File(
-                label="上传文件（可选）",
-                file_types=[".md", ".markdown", ".txt"],
-            )
-            raw_text = gr.Textbox(
-                label="粘贴原始内容（任意格式：旧简历、笔记、工作总结等）",
-                lines=10,
-                placeholder="例如：\n我叫张三，2020年从北大计算机硕士毕业，现在在字节跳动做后端开发...\n\n或者直接粘贴已格式化的 Markdown 简历内容",
-            )
-            convert_btn = gr.Button("智能转换（AI 整理为标准格式）", variant="secondary")
+    generate_btn = gr.Button("生成简历", variant="primary", size="lg")
 
-            gr.Markdown("### 简历 Markdown（可编辑）")
-            md_text = gr.Textbox(
-                label="标准 Markdown 内容",
-                lines=12,
-                placeholder="# 姓名\n\n- 手机: 138-0000-0000\n- 邮箱: example@email.com\n\n## 教育经历\n...",
-                interactive=True,
-            )
-
-            with gr.Row():
-                photo = gr.Image(
-                    label="证件照（可选）",
-                    type="filepath",
-                )
-                with gr.Column():
-                    fit_one_page = gr.Checkbox(
-                        label="自动适配一页",
-                        value=False,
-                    )
-                    generate_btn = gr.Button("生成简历", variant="primary", size="lg")
-
-        with gr.Column(scale=1):
-            preview_img = gr.Image(label="预览", type="filepath")
-            with gr.Row():
-                pdf_output = gr.File(label="下载 PDF")
-                html_output = gr.File(label="下载 HTML")
-                png_output = gr.File(label="下载 PNG")
+    gr.Markdown("### 生成结果")
+    preview_img = gr.Image(label="预览", type="filepath")
+    with gr.Row():
+        pdf_output = gr.File(label="下载 PDF")
+        html_output = gr.File(label="下载 HTML")
+        png_output = gr.File(label="下载 PNG")
 
     convert_btn.click(
         fn=smart_convert,

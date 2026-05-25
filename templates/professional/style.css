@@ -28,21 +28,21 @@ body {
     position: relative;
     margin-bottom: 6pt;
     padding-bottom: 4pt;
-    border-bottom: 1.5pt solid var(--accent-color);
+    min-height: 80pt;
 }
 
 .photo {
     position: absolute;
     top: 0;
     right: 0;
-    width: 72pt;
-    height: 96pt;
+    width: 60pt;
+    height: 78pt;
     object-fit: cover;
     border-radius: 2pt;
 }
 
 .header-info {
-    padding-right: 80pt;
+    padding-right: 68pt;
 }
 
 h1 {

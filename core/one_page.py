@@ -1,3 +1,5 @@
+from playwright.sync_api import sync_playwright
+
 TUNING_STEPS = [
     ("--page-margin", 20, 12, -2, "mm"),
     ("--section-spacing", 12, 4, -2, "pt"),
@@ -8,10 +10,18 @@ TUNING_STEPS = [
 ]
 
 
-def _get_page_count(html: str) -> int:
-    import weasyprint
-    doc = weasyprint.HTML(string=html)
-    return len(doc.render().pages)
+def _get_page_count_playwright(html: str) -> int:
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.set_content(html, wait_until="networkidle")
+        pdf_bytes = page.pdf(format="A4", print_background=True)
+        browser.close()
+    import fitz
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    count = len(doc)
+    doc.close()
+    return count
 
 
 def _build_override_css(overrides: dict) -> str:
@@ -22,9 +32,6 @@ def _build_override_css(overrides: dict) -> str:
         "<style>",
         ":root {",
         props,
-        "}",
-        "@page {",
-        f"    margin: {overrides.get('--page-margin', '20mm')};",
         "}",
         "</style>",
     ]
@@ -39,9 +46,9 @@ def _inject_overrides(html: str, overrides: dict) -> str:
 
 
 def fit_to_one_page(html_content: str, max_iterations: int = 30) -> tuple:
-    import weasyprint
-    if _get_page_count(html_content) <= 1:
-        pdf_bytes = weasyprint.HTML(string=html_content).write_pdf()
+    if _get_page_count_playwright(html_content) <= 1:
+        from .renderer import render_pdf_playwright
+        pdf_bytes = render_pdf_playwright(html_content)
         return html_content, pdf_bytes
 
     overrides = {}
@@ -49,7 +56,7 @@ def fit_to_one_page(html_content: str, max_iterations: int = 30) -> tuple:
     iterations = 0
 
     for var_name, initial, minimum, step, unit in TUNING_STEPS:
-        if _get_page_count(current_html) <= 1:
+        if _get_page_count_playwright(current_html) <= 1:
             break
 
         value = initial
@@ -59,8 +66,9 @@ def fit_to_one_page(html_content: str, max_iterations: int = 30) -> tuple:
             overrides[var_name] = f"{value}{unit}" if unit else str(value)
             current_html = _inject_overrides(html_content, overrides)
             iterations += 1
-            if _get_page_count(current_html) <= 1:
+            if _get_page_count_playwright(current_html) <= 1:
                 break
 
-    pdf_bytes = weasyprint.HTML(string=current_html).write_pdf()
+    from .renderer import render_pdf_playwright
+    pdf_bytes = render_pdf_playwright(current_html)
     return current_html, pdf_bytes

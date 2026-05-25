@@ -5,7 +5,6 @@ import re
 import tempfile
 from io import BytesIO
 from pathlib import Path
-from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader
 from markupsafe import Markup
@@ -42,22 +41,30 @@ def render_html(resume_data: ResumeData, template_name: str = "classic") -> str:
     return template.render(resume=resume_data, css=css_content)
 
 
-def render_pdf(html_content: str) -> bytes:
-    import weasyprint
-    doc = weasyprint.HTML(string=html_content, base_url=str(TEMPLATES_DIR))
-    return doc.write_pdf()
+def render_pdf_playwright(html_content: str) -> bytes:
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.set_content(html_content, wait_until="networkidle")
+        pdf_bytes = page.pdf(
+            format="A4",
+            margin={"top": "10mm", "bottom": "10mm", "left": "12mm", "right": "12mm"},
+            print_background=True,
+        )
+        browser.close()
+    return pdf_bytes
 
 
-def render_png(pdf_bytes: bytes, dpi: int = 200) -> bytes:
+def render_png_from_pdf(pdf_bytes: bytes) -> bytes:
     try:
-        from pdf2image import convert_from_bytes
-        images = convert_from_bytes(pdf_bytes, dpi=dpi, first_page=1, last_page=1)
-        buf = BytesIO()
-        images[0].save(buf, format="PNG")
-        return buf.getvalue()
-    except Exception:
-        import weasyprint
-        doc = weasyprint.HTML(string="<html><body></body></html>")
+        import fitz
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        page = doc[0]
+        mat = fitz.Matrix(2.0, 2.0)
+        pix = page.get_pixmap(matrix=mat)
+        return pix.tobytes("png")
+    except ImportError:
         img = Image.new("RGB", (1654, 2339), "white")
         buf = BytesIO()
         img.save(buf, format="PNG")
@@ -79,9 +86,9 @@ def generate_all(
         from .one_page import fit_to_one_page
         html_content, pdf_bytes = fit_to_one_page(html_content)
     else:
-        pdf_bytes = render_pdf(html_content)
+        pdf_bytes = render_pdf_playwright(html_content)
 
-    png_bytes = render_png(pdf_bytes)
+    png_bytes = render_png_from_pdf(pdf_bytes)
 
     output_dir = tempfile.mkdtemp(prefix="md2resume_")
 
