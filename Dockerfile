@@ -13,5 +13,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && playwright install chromium
 
 COPY . .
+ENV GRADIO_SERVER_NAME=0.0.0.0
 EXPOSE 7860
 CMD ["python", "app.py"]
