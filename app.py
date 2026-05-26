@@ -1,11 +1,5 @@
 import os
 
-# Patch jinja2 LRUCache: unhashable dict key in template cache crashes starlette
-import jinja2.utils
-
-jinja2.utils.LRUCache.get = lambda self, key, default=None: default
-jinja2.utils.LRUCache.__setitem__ = lambda self, key, value: None
-
 # Patch gradio_client bug: additionalProperties=true (bool) crashes get_type()
 import gradio_client.utils as _gc_utils
 

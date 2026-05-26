@@ -1,7 +1,7 @@
 gradio==4.44.1
 huggingface_hub==0.23.5
-jinja2
-markupsafe
+jinja2==3.0.3
+markupsafe==2.1.5
 Pillow
 openai
 playwright
