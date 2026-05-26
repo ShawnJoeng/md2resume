@@ -1,5 +1,20 @@
 import os
 
+# Patch jinja2 LRUCache: unhashable dict key in template cache crashes starlette
+import jinja2.utils
+
+_orig_lru_getitem = jinja2.utils.LRUCache.__getitem__
+
+
+def _patched_lru_getitem(self, key):
+    try:
+        return _orig_lru_getitem(self, key)
+    except TypeError:
+        raise KeyError(key)
+
+
+jinja2.utils.LRUCache.__getitem__ = _patched_lru_getitem
+
 # Patch gradio_client bug: additionalProperties=true (bool) crashes get_type()
 import gradio_client.utils as _gc_utils
 
