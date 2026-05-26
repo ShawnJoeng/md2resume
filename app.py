@@ -1,4 +1,30 @@
 import os
+
+# Patch gradio_client bug: additionalProperties=true (bool) crashes get_type()
+import gradio_client.utils as _gc_utils
+
+_orig_get_type = _gc_utils.get_type
+
+
+def _patched_get_type(schema):
+    if not isinstance(schema, dict):
+        return "Any"
+    return _orig_get_type(schema)
+
+
+_gc_utils.get_type = _patched_get_type
+
+_orig_json_schema = _gc_utils._json_schema_to_python_type
+
+
+def _patched_json_schema(schema, defs):
+    if not isinstance(schema, dict):
+        return "Any"
+    return _orig_json_schema(schema, defs)
+
+
+_gc_utils._json_schema_to_python_type = _patched_json_schema
+
 import gradio as gr
 from pathlib import Path
 
