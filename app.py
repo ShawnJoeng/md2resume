@@ -132,15 +132,16 @@ with gr.Blocks(
         interactive=True,
     )
 
-    with gr.Row():
-        photo = gr.Image(
-            label="证件照（可选）",
-            type="filepath",
-        )
-        fit_one_page = gr.Checkbox(
-            label="自动适配一页",
-            value=True,
-        )
+    photo = gr.Image(
+        label="证件照（可选）",
+        type="filepath",
+        sources=["upload"],
+        height=150,
+    )
+    fit_one_page = gr.Checkbox(
+        label="自动适配一页",
+        value=True,
+    )
 
     generate_btn = gr.Button("生成简历", variant="primary", size="lg")
 

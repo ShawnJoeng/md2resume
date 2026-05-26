@@ -51,14 +51,27 @@ h2 {{
 
 def fit_to_one_page(html_content: str) -> tuple:
     pdf_bytes, count = _render_and_count(html_content)
-    if count <= 1:
-        return html_content, pdf_bytes
 
+    if count > 1:
+        scale = 1.0
+        current_html = html_content
+        while count > 1 and scale > 0.7:
+            scale -= 0.05
+            current_html = _inject_scale_css(html_content, scale)
+            pdf_bytes, count = _render_and_count(current_html)
+        return current_html, pdf_bytes
+
+    # Content fits in less than one page — try scaling up to fill it
     scale = 1.0
-    current_html = html_content
-    while count > 1 and scale > 0.7:
-        scale -= 0.05
-        current_html = _inject_scale_css(html_content, scale)
-        pdf_bytes, count = _render_and_count(current_html)
+    last_good_html = html_content
+    last_good_pdf = pdf_bytes
+    while scale < 1.4:
+        scale += 0.05
+        candidate = _inject_scale_css(html_content, scale)
+        candidate_pdf, candidate_count = _render_and_count(candidate)
+        if candidate_count > 1:
+            break
+        last_good_html = candidate
+        last_good_pdf = candidate_pdf
 
-    return current_html, pdf_bytes
+    return last_good_html, last_good_pdf
