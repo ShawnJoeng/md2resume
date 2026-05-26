@@ -129,7 +129,7 @@ with gr.Blocks(
         photo = gr.Image(
             label="证件照（可选）",
             type="filepath",
-            sources=["upload"],
+            sources=("upload",),
         )
         fit_one_page = gr.Checkbox(
             label="自动适配一页",
