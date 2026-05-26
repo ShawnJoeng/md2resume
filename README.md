@@ -4,8 +4,6 @@
 
 一款开源的智能简历生成工具，支持 AI 智能转换（STAR 法则）、专业模板、一页自适应。
 
-**在线使用：https://md2resume.onrender.com**
-
 ## Features
 
 - **AI 智能转换** — 随意粘贴经历/旧简历，AI 自动整理为 STAR 法则格式的专业简历
