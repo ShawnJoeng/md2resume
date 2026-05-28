@@ -31,23 +31,18 @@ playwright install chromium
 ### 2. 启动应用
 
 ```bash
-python app.py
+python app.py #或 python3 app.py
 ```
 
 浏览器打开 `http://localhost:7860` 即可使用。
 
 ## 使用流程
 
-### 方式一：智能转换（推荐）
-
 1. 填入你的 API Key 和 Base URL（兼容 OpenAI 格式）
 2. 粘贴你的原始经历（任意格式：旧简历、笔记、工作总结等）
 3. 点击「智能转换」，AI 会自动整理为 STAR 法则格式
 4. 上传证件照（可选），点击「生成简历」
 
-### 方式二：手写 Markdown
-
-按照下方格式规则直接撰写 Markdown，粘贴到「简历 Markdown」输入框，点击生成即可。
 
 ## Markdown 格式规则
 
