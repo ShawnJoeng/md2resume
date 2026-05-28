@@ -146,7 +146,7 @@ with gr.Blocks(
     generate_btn = gr.Button("生成简历", variant="primary", size="lg")
 
     gr.Markdown("### 生成结果")
-    preview_img = gr.Image(label="预览", type="filepath")
+    preview_img = gr.Image(label="预览", type="filepath", show_fullscreen_button=False)
     with gr.Row():
         pdf_output = gr.File(label="下载 PDF")
         html_output = gr.File(label="下载 HTML")
